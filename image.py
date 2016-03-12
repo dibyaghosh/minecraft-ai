@@ -39,7 +39,10 @@ def where_is(name, array):
     return v[max(v)] + " " + h[max(h)]
 
 def analyzeImage(file):
-    imb = Image.open(file)
+    if(isinstance(file),str):
+        imb = Image.open(file)
+    else:
+        imb = file
     scale = 10
     im2b = imb.resize((1360//scale,768//scale),Image.LANCZOS)
     arr2b = np.array(im2b)
