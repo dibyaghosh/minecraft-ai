@@ -387,3 +387,29 @@ Full revolution time: ~1.65 sec
     while time.time()-a < degrees/360*1.65:
         win32api.SetCursorPos(loc)
         time.sleep(.03)
+
+def v_rotate(degrees):
+    """
+    Assuming 1366*768 resolution
+    Cursor speed (right): (730,384)
+Full revolution time: ~1.65 sec
+
+Cursor speed (left): (636,384)
+Full revolution time: ~1.65 sec
+    """
+    degrees%=360
+    if(degrees > 180):
+        win32api.SetCursorPos()
+        loc = (683,410)
+        degrees = 360 - degrees
+    else:
+        loc = (683,358)
+    a = time.time()
+    print(degrees/360*1.65)
+    while time.time()-a < degrees/360*1.65:
+        win32api.SetCursorPos(loc)
+        time.sleep(.03)
+
+def center():
+    win32api.SetCursorPos([683,375])
+
