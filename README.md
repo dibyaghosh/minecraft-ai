@@ -1,4 +1,4 @@
-# minecraft-ai
+# Minecraft AI
 A self-learning Minecraft AI
 
 # TODO
