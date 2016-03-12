@@ -1,5 +1,6 @@
 import pickle
 from sklearn import svm
+import numpy as np
 
 def array_to_feature(array):
     meanr = np.mean(array[:,:,0])
@@ -19,25 +20,31 @@ class NewSVC:
         self.f = array_to_feature
         self.ax = []
     
-    def add_prediction(self,image,y):
+    def add_prediction(self, image,y):
         self.x.append(image)
         self.y.append(y)
         self.ax.append(self.f(image))
-        self.SVC.fit(self.ax,self.y)
+        if len(set(self.y)) > 1:
+            self.SVC.fit(self.ax, self.y)
+            print(self.check_accuracy())
+        self.save_to_file()
     
     def check_accuracy(self):
-        return SVC.score(self.ax,self.y)
+        return self.SVC.score(self.ax,self.y)
     
+    def guess(self,image):
+        if len(set(self.y)) > 1:
+            return self.SVC.predict(self.f(image))
+
     def save_to_file(self):
         data = [self.x,self.y]
-        pickle.dump(data,open("data"+len(self.y)))
+        pickle.dump(data,open("data"+str(len(self.y)),'wb'))
     
     def load_from_file(file):
         svc = NewSVC()
-        x,y = pickle.load(open(file))
+        x,y = pickle.load(open(file,'rb'))
         for image,yval in zip(x,y):
             svc.add_prediction(image,yval)
-        print(check_accuracy)
         return svc
         
 

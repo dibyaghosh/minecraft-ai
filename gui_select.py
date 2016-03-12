@@ -2,6 +2,7 @@ from tkinter import *
 from PIL import Image, ImageTk
 from sectionify import sectionify
 import numpy as np
+from block_svc import *
 
 #f = Image.open("file URL")
 
@@ -15,24 +16,25 @@ canvas = Canvas(root,width=999,height=999)
 canvas.pack()
 pilImage = Image.open("pic.jpg")
 
-sections = sectionify(10, np.array(pilImage))
+sections = sectionify(5, np.array(pilImage))
 
 image = ImageTk.PhotoImage(Image.fromarray(sections[0]))
 imagesprite = canvas.create_image(400,400,image=image)
 
 i = 0
 
-#n = NewSVC()
+n = NewSVC()
 
 def enter(e):
     global i
     global imagesprite
     s = w.get()
-    #n.add_prediction(np.array(sections[i]), s)
+    n.add_prediction(np.array(sections[i]), s)
 
     i += 1
 
     image = ImageTk.PhotoImage(Image.fromarray(sections[i]))
+    print(n.guess(sections[i]))
     canvas.delete(imagesprite)
 
     imagesprite = canvas.create_image(400,400,image=image)
