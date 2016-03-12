@@ -305,6 +305,26 @@ def try_get():
     analyzeImage(im)
     return im
 
+def new_main():
+    print("Move into Minecraft")
+    time.sleep(4)
+    im = ImageGrab.grab()
+    arr = analyzeImage(im)
+    while amount_in_array("wood",arr) > .01:
+        im = ImageGrab.grab()
+        arr = analyzeImage(im)
+        hor,ver = where_is("wood",arr)
+        if hor == "middle" and ver =="center":
+            break
+        if hor == "left":
+            rotate(45)
+        elif hor == "right":
+            rotate(-45)
+        elif ver == "top":
+            v_rotate(45)
+        elif ver == "bottom":
+            v_rotate(-45)
+            
 def main():
     print("Move into Minecraft")
     time.sleep(2)

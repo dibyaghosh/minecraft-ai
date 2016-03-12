@@ -38,7 +38,7 @@ def where_is(name, array):
     ar_bottom = amount_in_array(name, array[2 * array.shape[0] // 3:])
     h = {ar_left: "left", ar_middle: "middle", ar_right: "right"}
     v = {ar_top: "top", ar_center: "center", ar_bottom: "bottom"}
-    return v[max(v)] + " " + h[max(h)]
+    return [v[max(v)], h[max(h)]]
 
 def analyzeImage(file):
     if isinstance(file,str):
