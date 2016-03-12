@@ -2,7 +2,6 @@ import numpy as np
 from PIL import Image
 
 sections = 10
-im = np.array(f)
 
 def sectionify(n, l):
     row_length = len(l[0])
@@ -10,7 +9,7 @@ def sectionify(n, l):
 
     length_rsections = row_length//n
     length_csections = column_length//n
-    
+
     grouped_l = []
 
     for i in range(n):
