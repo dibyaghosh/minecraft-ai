@@ -1,6 +1,8 @@
 import pickle
 from sklearn import svm
 import numpy as np
+from scipy.misc import imresize
+from sklearn import linear_model
 
 def array_to_feature(array):
     meanr = np.mean(array[:,:,0])
@@ -11,10 +13,15 @@ def array_to_feature(array):
     sigmab =np.std(array[:,:,2])
     return [meanr,meang,meanb,sigmar,sigmag,sigmab]
 
+def new_feature_array(array):
+    array = imresize(array,(5,5))
+    return array.flatten()
+
+default_svc = new_feature_array
 
 class NewSVC:
-    def __init__(self,function=array_to_feature):
-        self.SVC = svm.SVC()
+    def __init__(self,function=default_svc):
+        self.SVC = linear_model.LogisticRegression()
         self.x = []
         self.y = []
         self.f = array_to_feature
@@ -38,13 +45,16 @@ class NewSVC:
 
     def save_to_file(self):
         data = [self.x,self.y]
-        pickle.dump(data,open("data"+str(len(self.y)),'wb'))
+        pickle.dump(data,open("blockdata",'wb'))
     
     def load_from_file(file):
         svc = NewSVC()
         x,y = pickle.load(open(file,'rb'))
-        for image,yval in zip(x,y):
-            svc.add_prediction(image,yval)
+        svc.x = x
+        svc.y = y
+        svc.ax = [svc.f(i) for i in x]
+        svc.SVC.fit(svc.ax,svc.y)
+        print(svc.check_accuracy())
         return svc
         
 

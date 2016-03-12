@@ -14,5 +14,5 @@ def sectionify(n, l):
 
     for i in range(n):
         for j in range(n):
-            grouped_l.append(l[i*length_rsections:(i+1)*length_rsections,j*length_csections:(j+1)*length_csections])
+            grouped_l.append(l[j*length_csections:(j+1)*length_csections,i*length_rsections:(i+1)*length_rsections])
     return grouped_l
