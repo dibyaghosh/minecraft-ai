@@ -295,21 +295,51 @@ def leave_inventory():
     time.sleep(.1)
     KeyUp(Key)
 
+from PIL import ImageGrab
+from image import *
+
+def try_get():
+    print("Move into Minecraft")
+    time.sleep(5)
+    im = ImageGrab.grab()
+    analyzeImage(im)
+    return im
 
 def main():
     print("Move into Minecraft")
     time.sleep(2)
-    while True:
-        move_forward(1)
-        move_left(1)
-        move_back(1)
-        move_right(1)
-        time.sleep(1)
-        click(1)
-        rotate(170)
-        get_inventory()
-        time.sleep(1)
-        leave_inventory()
+    images = []
+    try:
+        while True:
+            im = ImageGrab.grab()
+            images.append(im)
+            analyzeImage(im)
+            move_forward(1)
+            im = ImageGrab.grab()
+            analyzeImage(im)
+            images.append(im)
+            move_left(1)
+            im = ImageGrab.grab()
+            analyzeImage(im)
+            images.append(im)
+            move_back(1)
+            im = ImageGrab.grab()
+            analyzeImage(im)
+            images.append(im)
+            move_right(1)
+            im = ImageGrab.grab()
+            analyzeImage(im)
+            images.append(im)
+            time.sleep(1)
+            click(1)
+            rotate(170)
+            get_inventory()
+            time.sleep(1)
+            leave_inventory()
+    except:
+        return images
+    return images
+    
 
 def click(t):
     mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)

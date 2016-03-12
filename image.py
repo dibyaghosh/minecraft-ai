@@ -3,9 +3,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 colors = {"sky": [150, 177, 224], "water": [74, 94, 228], "sand": [219, 212, 157], "grass": [
-    72, 116, 55], "tree": [27, 35, 20], 'wood': [76, 60, 35], "whitewood": [173, 173, 130], "snow": [250, 250, 250]}
+    72, 116, 55], "tree": [27, 35, 20], 'wood': [54, 34, 7], "whitewood": [173, 173, 130],
+          , "dirt": [106,78,57],"snow": [250, 250, 250]}
 tolerance = {"sky": 100, "water": 100, "sand": 50, "grass": 50,
-             "tree": 50, 'wood': 100, "whitewood": 60, "snow": 30}
+             "tree": 50, 'wood': 40, "whitewood": 60, "snow": 30, "dirt": 50}
 
 
 def amount_in_array(name, array):
@@ -16,13 +17,14 @@ def get_counts(array):
     gotem = 0
     for name, color in colors.items():
         amount = amount_in_array(name, array)
-        print(name, amount)
+        if amount > .1:
+            print(name, amount)
         gotem += amount
     print("Got:", gotem)
 
 
 def show(array, name):
-    plt.imshow(np.sum(np.abs(arr2b - colors[name]), axis=2) < tolerance[name])
+    plt.imshow(np.sum(np.abs(array - colors[name]), axis=2) < tolerance[name])
     plt.show()
 
 def where_is(name, array):
@@ -39,7 +41,7 @@ def where_is(name, array):
     return v[max(v)] + " " + h[max(h)]
 
 def analyzeImage(file):
-    if(isinstance(file),str):
+    if isinstance(file,str):
         imb = Image.open(file)
     else:
         imb = file
@@ -52,3 +54,4 @@ def analyzeImage(file):
     for color in colors:
         print(color, ":",where_is(color,arr2b))
     print(time.time()-t)
+    return arr2b
