@@ -4,16 +4,17 @@ import time
 import random
 import win32api
 
-
 from PIL import ImageGrab
 from image import *
+from MCKeyboard import *
+
+
 
 def try_get():
     print("Move into Minecraft")
     time.sleep(5)
-    im = ImageGrab.grab()
-    analyzeImage(im)
-    return im
+    MCK = MC_Window()
+    MCK.move_forward(1)
 
 def new_main():
     print("Move into Minecraft")
@@ -39,33 +40,35 @@ def main():
     print("Move into Minecraft")
     time.sleep(2)
     images = []
+    MCK = MC_Window()
     try:
         while True:
             im = ImageGrab.grab()
             images.append(im)
             analyzeImage(im)
-            move_forward(1)
+            MCK.move_forward(1)
             im = ImageGrab.grab()
             analyzeImage(im)
             images.append(im)
-            move_left(1)
+            MCK.move_left(1)
             im = ImageGrab.grab()
             analyzeImage(im)
             images.append(im)
-            move_back(1)
+            MCK.move_back(1)
             im = ImageGrab.grab()
             analyzeImage(im)
             images.append(im)
-            move_right(1)
+            MCK.move_right(1)
             im = ImageGrab.grab()
             analyzeImage(im)
             images.append(im)
             time.sleep(1)
-            click(1)
-            rotate(170)
-            get_inventory()
+            MCK.mine(1)
+            MCK.rotate(170)
+            MCK.get_inventory()
             time.sleep(1)
-            leave_inventory()
-    except:
+            MCK.leave_inventory()
+    except Exception as e:
+        print(e,"Got exception!")
         return images
     return images

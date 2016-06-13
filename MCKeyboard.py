@@ -1,5 +1,6 @@
 import win32con
 from win32api import keybd_event, mouse_event
+import win32gui
 import time
 import random
 import win32api
@@ -222,7 +223,6 @@ Base = {
 def KeyUp(Key):
     keybd_event(Key, 0, 2, 0)
 
-
 def KeyDown(Key):
     keybd_event(Key, 0, 1, 0)
 
@@ -251,99 +251,120 @@ def Write(Str, speed = 1):
         Press(s, speed)
         time.sleep((0.1 + random.random()/10.0) / float(speed))
 
-
-def move_forward(t):
-    a = time.time()
-    while time.time()-a < t:
-        Key = Base['w']
-        KeyDown(Key)
-        time.sleep(.05)
-    KeyUp(Key)
-
-def move_back(t):
-    a = time.time()
-    while time.time()-a < t:
-        Key = Base['s']
-        KeyDown(Key)
-        time.sleep(.05)
-    KeyUp(Key)
-
-def move_left(t):
-    a = time.time()
-    while time.time()-a < t:
-        Key = Base['a']
-        KeyDown(Key)
-        time.sleep(.1)
-    KeyUp(Key)
-
-def move_right(t):
-    a = time.time()
-    while time.time()-a < t:
-        Key = Base['d']
-        KeyDown(Key)
-        time.sleep(.1)
-    KeyUp(Key)
-
-def get_inventory():
-    Key = Base['e']
-    KeyDown(Key)
-    time.sleep(.1)
-    KeyUp(Key)
-
-def leave_inventory():
-    Key = Base['ESC']
-    KeyDown(Key)
-    time.sleep(.1)
-    KeyUp(Key)
-
 def click(t):
     mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
     time.sleep(t)
     mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
 
-def rotate(degrees):
-    """
-    Assuming 1366*768 resolution
-    Cursor speed (right): (730,384)
-Full revolution time: ~1.65 sec
 
-Cursor speed (left): (636,384)
-Full revolution time: ~1.65 sec
-    """
-    degrees%=360
-    if(degrees > 180):
-        win32api.SetCursorPos()
-        loc = (730,384)
-        degrees = 360 - degrees
-    else:
-        loc = (636,384)
-    a = time.time()
-    print(degrees/360*1.65)
-    while time.time()-a < degrees/360*1.65:
-        win32api.SetCursorPos(loc)
-        time.sleep(.03)
+class MC_Window:
 
-def v_rotate(degrees):
-    """
-    Assuming 1366*768 resolution
-    Cursor speed (right): (730,384)
-Full revolution time: ~1.65 sec
+    def __init__(self,version="1.8.9"):
+        window = win32gui.FindWindow(None,"Minecraft %s"%version)
+        if window == 0:
+            print("Couldn't find window with title: Minecraft %s"%version)
+            raise ConnectionError
+        rect = win32gui.GetWindowRect(window)
+        self.tl = (rect[0],rect[1])
+        self.br = (rect[2],rect[3])
+        self.center = (rect[0]+rect[2])//2, (rect[1]+rect[3])//2
+        self.dimensions =  (rect[2]-rect[0]), (rect[3]-rect[1])
 
-Cursor speed (left): (636,384)
-Full revolution time: ~1.65 sec
-    """
-    degrees%=360
-    if(degrees > 180):
-        win32api.SetCursorPos()
-        loc = (683,410)
-        degrees = 360 - degrees
-    else:
-        loc = (683,358)
-    a = time.time()
-    print(degrees/360*1.65)
-    while time.time()-a < degrees/360*1.65:
-        win32api.SetCursorPos(loc)
-        time.sleep(.03)
+    def move_forward(self, t=.1):
+        startTime = time.time()
+        while time.time()- startTime < t:
+            Key = Base['w']
+            KeyDown(Key)
+            time.sleep(.05)
+        KeyUp(Key)
 
-def center():
-    win32api.SetCursorPos([683,375])
+    def move_back(self, t = .1):
+        startTime = time.time()
+        while time.time()-startTime < t:
+            Key = Base['s']
+            KeyDown(Key)
+            time.sleep(.05)
+        KeyUp(Key)
+
+    def move_left(self, t = .1):
+        startTime = time.time()
+        while time.time()-startTime < t:
+            Key = Base['a']
+            KeyDown(Key)
+            time.sleep(.1)
+        KeyUp(Key)
+
+    def mine(self,t = .1):
+        click(t)
+        
+    def move_right(self, t = .1):
+        startTime = time.time()
+        while time.time()-startTime < t:
+            Key = Base['d']
+            KeyDown(Key)
+            time.sleep(.1)
+        KeyUp(Key)
+
+    def get_inventory(self):
+        Key = Base['e']
+        KeyDown(Key)
+        time.sleep(.1)
+        KeyUp(Key)
+
+    def leave_inventory(self):
+        Key = Base['ESC']
+        KeyDown(Key)
+        time.sleep(.1)
+        KeyUp(Key)
+
+    def rotate(self, degrees):
+        """
+        Assuming 1366*768 resolution
+        Cursor speed (right): (730,384)
+        Full revolution time: ~1.65 sec
+
+        Cursor speed (left): (636,384)
+        Full revolution time: ~1.65 sec
+        """
+        degrees%=360
+        if(degrees > 180):
+            win32api.SetCursorPos()
+            #loc = (730,384)
+            loc = (self.center[0]+50,self.center[1])
+            degrees = 360 - degrees
+        else:
+            loc = (self.center[0]-50, self.center[1])
+            #loc = (636,384)
+        a = time.time()
+        print(degrees/360*1.65)
+        while time.time()-a < degrees/360*1.65:
+            win32api.SetCursorPos(loc)
+            time.sleep(.03)
+
+    def v_rotate(self,degrees):
+        """
+        Assuming 1366*768 resolution
+        Cursor speed (right): (730,384)
+    Full revolution time: ~1.65 sec
+
+    Cursor speed (left): (636,384)
+    Full revolution time: ~1.65 sec
+        """
+        degrees%=180
+        if(degrees > 90):
+            win32api.SetCursorPos()
+            loc = (self.center[0],self.center[1]+30)
+            #loc = (683,410)
+        else:
+            loc = (self.center[0],self.center[1]-30)
+            #loc = (683,358)
+        a = time.time()
+        degrees = abs(90-degrees)
+        print(degrees/360*1.65)
+        while time.time()-a < degrees/360*1.65:
+            win32api.SetCursorPos(loc)
+            time.sleep(.03)
+
+    def center():
+        win32api.SetCursorPos(self.center)
+        win32api.SetCursorPos([683,375])

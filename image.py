@@ -4,7 +4,7 @@ import numpy as np
 
 colors = {"sky": [150, 177, 224], "water": [74, 94, 228], "sand": [219, 212, 157], "grass": [
     72, 116, 55], "tree": [27, 35, 20], 'wood': [54, 34, 7], "whitewood": [173, 173, 130],
-          , "dirt": [106,78,57],"snow": [250, 250, 250]}
+           "dirt": [106,78,57],"snow": [250, 250, 250]}
 tolerance = {"sky": 100, "water": 100, "sand": 50, "grass": 50,
              "tree": 50, 'wood': 40, "whitewood": 60, "snow": 30, "dirt": 50}
 
