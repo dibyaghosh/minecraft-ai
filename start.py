@@ -4,49 +4,6 @@ import time
 import random
 import win32api
 
-def move_forward(t):
-    a = time.time()
-    while time.time()-a < t:
-        Key = Base['w']
-        KeyDown(Key)
-        time.sleep(.05)
-    KeyUp(Key)
-
-def move_back(t):
-    a = time.time()
-    while time.time()-a < t:
-        Key = Base['s']
-        KeyDown(Key)
-        time.sleep(.05)
-    KeyUp(Key)
-
-def move_left(t):
-    a = time.time()
-    while time.time()-a < t:
-        Key = Base['a']
-        KeyDown(Key)
-        time.sleep(.1)
-    KeyUp(Key)
-
-def move_right(t):
-    a = time.time()
-    while time.time()-a < t:
-        Key = Base['d']
-        KeyDown(Key)
-        time.sleep(.1)
-    KeyUp(Key)
-
-def get_inventory():
-    Key = Base['e']
-    KeyDown(Key)
-    time.sleep(.1)
-    KeyUp(Key)
-
-def leave_inventory():
-    Key = Base['ESC']
-    KeyDown(Key)
-    time.sleep(.1)
-    KeyUp(Key)
 
 from PIL import ImageGrab
 from image import *
@@ -112,56 +69,3 @@ def main():
     except:
         return images
     return images
-
-
-def click(t):
-    mouse_event(win32con.MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0)
-    time.sleep(t)
-    mouse_event(win32con.MOUSEEVENTF_LEFTUP, 0, 0, 0, 0)
-
-def rotate(degrees):
-    """
-    Assuming 1366*768 resolution
-    Cursor speed (right): (730,384)
-Full revolution time: ~1.65 sec
-
-Cursor speed (left): (636,384)
-Full revolution time: ~1.65 sec
-    """
-    degrees%=360
-    if(degrees > 180):
-        win32api.SetCursorPos()
-        loc = (730,384)
-        degrees = 360 - degrees
-    else:
-        loc = (636,384)
-    a = time.time()
-    print(degrees/360*1.65)
-    while time.time()-a < degrees/360*1.65:
-        win32api.SetCursorPos(loc)
-        time.sleep(.03)
-
-def v_rotate(degrees):
-    """
-    Assuming 1366*768 resolution
-    Cursor speed (right): (730,384)
-Full revolution time: ~1.65 sec
-
-Cursor speed (left): (636,384)
-Full revolution time: ~1.65 sec
-    """
-    degrees%=360
-    if(degrees > 180):
-        win32api.SetCursorPos()
-        loc = (683,410)
-        degrees = 360 - degrees
-    else:
-        loc = (683,358)
-    a = time.time()
-    print(degrees/360*1.65)
-    while time.time()-a < degrees/360*1.65:
-        win32api.SetCursorPos(loc)
-        time.sleep(.03)
-
-def center():
-    win32api.SetCursorPos([683,375])
